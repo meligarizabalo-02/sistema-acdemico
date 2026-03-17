@@ -73,7 +73,7 @@ function Login() {
         <label>Correo Electronico</label>
         <input
           type="email"
-          placeholder="Ingrese su correo"
+          placeholder="Ingrese su usuario"
           value={correo}
           onChange={(e) => setCorreo(e.target.value)}
           style={{
