@@ -70,7 +70,7 @@ function Login() {
         </p>
 
         {/* Correo */}
-        <label>Correo Electronico</label>
+        <label>Usuario</label>
         <input
           type="email"
           placeholder="Ingrese su usuario"
