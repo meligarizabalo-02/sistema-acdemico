@@ -23,7 +23,7 @@ function Registro() {
     alert(data.mensaje);
 
     if (data.success) {
-      navigate("/"); // 🔥 vuelve al login
+      navigate("/"); //vuelve al login
     }
   };
 
