@@ -6,38 +6,110 @@ function Calificaciones() {
 
   const navigate = useNavigate();
 
-  const [notas, setNotas] = useState([
-    { id: 1, estudiante: "Juan Pérez", materia: "Matemáticas", nota: 4.5 },
-    { id: 2, estudiante: "María Gómez", materia: "Español", nota: 3.8 }
+  // BASE DE DATOS SIMULADA
+  const [data, setData] = useState([
+    {
+      estudiante: "Juan Pérez",
+      notas: [
+        { materia: "Matemáticas", nota: 4.5 },
+        { materia: "Español", nota: 3.8 }
+      ]
+    },
+    {
+      estudiante: "María Gómez",
+      notas: [
+        { materia: "Inglés", nota: 4.2 },
+        { materia: "Ciencias", nota: 3.9 }
+      ]
+    }
   ]);
 
+  const [busqueda, setBusqueda] = useState("");
+  const [seleccionado, setSeleccionado] = useState(null);
+
   const [nueva, setNueva] = useState({
-    estudiante: "",
     materia: "",
     nota: ""
   });
 
+  //BUSCAR ESTUDIANTE
+  const buscar = () => {
+    const encontrado = data.find(e =>
+      e.estudiante.toLowerCase().includes(busqueda.toLowerCase())
+    );
+
+    if (encontrado) {
+      setSeleccionado(encontrado);
+    } else {
+      alert("Estudiante no encontrado");
+      setSeleccionado(null);
+    }
+  };
+
+  //AGREGAR NOTA
   const agregarNota = () => {
-    if (!nueva.estudiante || !nueva.materia || !nueva.nota) {
+    if (!nueva.materia || !nueva.nota) {
       alert("Completa todos los campos");
       return;
     }
 
-    setNotas([
-      ...notas,
-      { ...nueva, id: Date.now() }
-    ]);
-
-    setNueva({
-      estudiante: "",
-      materia: "",
-      nota: ""
+    const actualizado = data.map(e => {
+      if (e.estudiante === seleccionado.estudiante) {
+        return {
+          ...e,
+          notas: [...e.notas, nueva]
+        };
+      }
+      return e;
     });
+
+    setData(actualizado);
+    setNueva({ materia: "", nota: "" });
+    buscar();
+  };
+
+  // ELIMINAR NOTA
+  const eliminarNota = (index) => {
+    const actualizado = data.map(e => {
+      if (e.estudiante === seleccionado.estudiante) {
+        return {
+          ...e,
+          notas: e.notas.filter((_, i) => i !== index)
+        };
+      }
+      return e;
+    });
+
+    setData(actualizado);
+    buscar();
+  };
+
+  // EDITAR NOTA
+  const editarNota = (index) => {
+    const nuevaNota = prompt("Nueva nota:");
+
+    if (!nuevaNota) return;
+
+    const actualizado = data.map(e => {
+      if (e.estudiante === seleccionado.estudiante) {
+        const nuevasNotas = [...e.notas];
+        nuevasNotas[index].nota = nuevaNota;
+
+        return {
+          ...e,
+          notas: nuevasNotas
+        };
+      }
+      return e;
+    });
+
+    setData(actualizado);
+    buscar();
   };
 
   return (
     <div style={{
-      backgroundColor: "#f5eaea",
+      backgroundColor: "#eee3e3",
       minHeight: "100vh",
       display: "flex",
       flexDirection: "column",
@@ -48,125 +120,101 @@ function Calificaciones() {
       {/* HEADER */}
       <div style={{ textAlign: "center", marginBottom: "30px" }}>
         <h3 style={{ color: "#2e2e8f" }}>
-          Institución Educativa Distrital San José
+          Sistema Académico
         </h3>
 
-        <img
-          src={logo}
-          alt="Logo"
-          style={{ width: "120px", marginTop: "10px" }}
-        />
+        <img src={logo} alt="Logo" style={{ width: "120px" }} />
       </div>
 
       {/* CONTENEDOR */}
       <div style={{
         width: "600px",
-        maxWidth: "95%",
         backgroundColor: "white",
         padding: "30px",
         borderRadius: "10px",
         border: "1px solid #6c63ff"
       }}>
 
-        <h2 style={{ marginBottom: "20px", color: "#494747"  }}>
-          Gestión de Calificaciones
+        <h2 style={{ color: "black" }}> 
+          Calificaciones 
         </h2>
 
-        {/* FORMULARIO */}
-        <div style={{ marginBottom: "20px" }}>
-          <input
-            placeholder="Estudiante"
-            value={nueva.estudiante}
-            onChange={(e) => setNueva({ ...nueva, estudiante: e.target.value })}
-            style={{
-              width: "100%",
-              padding: "8px",
-              marginBottom: "10px",
-              borderRadius: "20px",
-              border: "none",
-              backgroundColor: "#131212",
-              color: "white"
-            }}
-          />
+        {/* BUSCADOR */}
+        <input
+          placeholder="Buscar estudiante..."
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+          style={{
+            width: "100%",
+            padding: "10px",
+            marginBottom: "10px",
+            borderRadius: "20px",
+            border: "none",
+            backgroundColor: "#131212",
+            color: "white"
+          }}
+        />
 
-          <input
-            placeholder="Materia"
-            value={nueva.materia}
-            onChange={(e) => setNueva({ ...nueva, materia: e.target.value })}
-            style={{
-              width: "100%",
-              padding: "8px",
-              marginBottom: "10px",
-              borderRadius: "20px",
-              border: "none",
-              backgroundColor: "#131212",
-              color: "white"
-            }}
-          />
-
-          <input
-            placeholder="Nota"
-            value={nueva.nota}
-            onChange={(e) => setNueva({ ...nueva, nota: e.target.value })}
-            style={{
-              width: "100%",
-              padding: "8px",
-              marginBottom: "10px",
-              borderRadius: "20px",
-              border: "none",
-              backgroundColor: "#131212",
-              color: "white"
-            }}
-          />
-
-          <button
-            onClick={agregarNota}
-            style={{
-              width: "100%",
-              padding: "10px",
-              backgroundColor: "#0c005b",
-              color: "white",
-              border: "none",
-              borderRadius: "20px",
-              cursor: "pointer"
-            }}
-          >
-            Agregar Nota
-          </button>
-        </div>
-
-        {/* TABLA */}
-        <table style={{
+        <button onClick={buscar} style={{
           width: "100%",
-          borderCollapse: "collapse",
-          marginTop: "20px"
+          padding: "10px",
+          backgroundColor: "#0c005b",
+          color: "white",
+          border: "none",
+          borderRadius: "20px"
         }}>
-          <thead>
-            <tr style={{ backgroundColor: "#2e2e8f", color: "white" }}>
-              <th style={{ padding: "10px" }}>Estudiante</th>
-              <th style={{ padding: "10px" }}>Materia</th>
-              <th style={{ padding: "10px" }}>Nota</th>
-            </tr>
-          </thead>
+          Buscar
+        </button>
 
-          <tbody>
-            {notas.map(n => (
-              <tr key={n.id} style={{ textAlign: "center" }}>
-                <td style={{ padding: "10px", borderBottom: "1px solid #0a0a0a", color: "black"}}>
-                  {n.estudiante}
-                </td>
-                <td style={{ padding: "10px", borderBottom: "1px solid #080808", color: "black" }}>
-                  {n.materia}
-                </td>
-                <td style={{ padding: "10px", borderBottom: "1px solid #0a0a0a", color: "black" }}>
-                  {n.nota}
-                </td>
-              </tr>
+        {/* RESULTADOS */}
+        {seleccionado && (
+          <>
+            <h3 style={{ marginTop: "20px" }}>
+              {seleccionado.estudiante}
+            </h3>
+
+            {/* TABLA */}
+            {seleccionado.notas.map((n, i) => (
+              <div key={i} style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                backgroundColor: "#f1f1f1",
+                padding: "10px",
+                borderRadius: "10px",
+                marginTop: "10px"
+              }}>
+                <span>{n.materia} - {n.nota}</span>
+
+                <div>
+                  <button onClick={() => editarNota(i)}>✏️</button>
+                  <button onClick={() => eliminarNota(i)}>🗑️</button>
+                </div>
+              </div>
             ))}
-          </tbody>
-        </table>
 
-        {/* BOTÓN VOLVER */}
+            {/* AGREGAR */}
+            <div style={{ marginTop: "20px" }}>
+              <input
+                placeholder="Materia"
+                value={nueva.materia}
+                onChange={(e) => setNueva({ ...nueva, materia: e.target.value })}
+              />
+
+              <input
+                placeholder="Nota"
+                value={nueva.nota}
+                onChange={(e) => setNueva({ ...nueva, nota: e.target.value })}
+              />
+
+              <button onClick={agregarNota}>
+                Agregar Nota
+              </button>
+            </div>
+          </>
+        )}
+
+        {/* VOLVER */}
         <button
           onClick={() => navigate("/menu")}
           style={{
@@ -176,8 +224,7 @@ function Calificaciones() {
             backgroundColor: "#2e2e8f",
             color: "white",
             border: "none",
-            borderRadius: "20px",
-            cursor: "pointer"
+            borderRadius: "20px"
           }}
         >
           Volver al menú
