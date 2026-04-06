@@ -47,7 +47,7 @@ function Menu() {
 
       {/* 🟢 2️⃣ CONTENEDOR PRINCIPAL */}
       <div style={{ padding: "40px" }}>
-        <h2 style={{ textAlign: "center", marginBottom: "30px" }}>
+        <h2 style={{ textAlign: "center", marginBottom: "30px", color: "#0a0966" }}>
           Menú de navegación
         </h2>
 
@@ -70,12 +70,13 @@ function Menu() {
               gap: "20px"
             }}
           >
-            <MenuButton icon="📄" text="Boletín" />
-            <MenuButton icon="📚" text="Materias" />
-            <MenuButton icon="📝" text="Calificaciones" />
-            <MenuButton icon="⏰" text="Horario" />
-            <MenuButton icon="📢" text="Anuncios" />
-            <MenuButton icon="👩‍🏫" text="Profesores" />
+            <MenuButton icon="📄" text="Boletín"  route="/boletin"/>
+            <MenuButton icon="📚" text="Materias" route="/materias" />
+            <MenuButton icon="📝" text="Calificaciones" route="/calificaciones" />
+            <MenuButton icon="⏰" text="Horario" route="/horario" />
+            <MenuButton icon="📢" text="Anuncios"  route="/anuncios" />
+            <MenuButton icon="👩‍🏫" text="Profesores" route="/profesores" />
+            <MenuButton icon="👩‍🎓" text="Estudiantes" route="/estudiantes" />
           </div>
         </div>
       </div>
@@ -90,9 +91,10 @@ function MenuButton({ icon, text }) {
         padding: "20px",
         fontSize: "16px",
         borderRadius: "8px",
-        border: "1px solid #ddd",
+        border: "1px solid #e9dada",
         cursor: "pointer",
-        backgroundColor: "#f9fafb"
+        backgroundColor: "#f9fafb",
+        color: "#063768"
       }}
     >
       <div style={{ fontSize: "30px" }}>{icon}</div>

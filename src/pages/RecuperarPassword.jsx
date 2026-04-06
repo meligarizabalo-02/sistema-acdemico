@@ -64,6 +64,7 @@ const styles = {
   },
   title: {
     marginBottom: "10px",
+    color: "black"
   },
   subtitle: {
     marginBottom: "20px",
@@ -72,11 +73,13 @@ const styles = {
   description: {
     marginBottom: "20px",
     fontSize: "14px",
+    color: "gray"
   },
   label: {
     display: "block",
     textAlign: "left",
     marginBottom: "5px",
+    color: "black"
   },
   input: {
     width: "100%",

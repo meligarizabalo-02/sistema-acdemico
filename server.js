@@ -30,11 +30,11 @@ app.get("/", (req, res) => {
 /* API LOGIN */
 app.post("/login", (req, res) => {
 
-  const { usuario, password } = req.body;
+  const { user, password } = req.body;
 
   const sql = "SELECT * FROM usuarios WHERE usuario = ? AND password = ?";
 
-  db.query(sql, [usuario, password], (err, result) => {
+  db.query(sql, [user, password], (err, result) => {
 
     if (err) {
       return res.json({
@@ -57,6 +57,27 @@ app.post("/login", (req, res) => {
 
   });
 
+});
+
+// REGISTRO
+app.post('/registro', (req, res) => {
+  const { user, password } = req.body;
+
+  const sql = "INSERT INTO usuarios (usuario, password) VALUES (?, ?)";
+
+  db.query(sql, [user, password], (err, result) => {
+    if (err) {
+      return res.json({
+        success: false,
+        mensaje: "Error al registrar usuario"
+      });
+    }
+
+    res.json({
+      success: true,
+      mensaje: "Usuario registrado correctamente"
+    });
+  });
 });
 
 app.listen(3001, () => {

@@ -2,33 +2,28 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.jpg";
 
-function Login() {
+function Registro() {
 
   const navigate = useNavigate();
 
-  const [correo, setCorreo] = useState("");
+  const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async () => {
+  const registrar = async () => {
 
-    const response = await fetch("http://localhost:3001/login", {
+    const res = await fetch("http://localhost:3001/registro", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        user: correo, 
-        password: password
-      })
+      body: JSON.stringify({ user, password })
     });
 
-    const data = await response.json();
+    const data = await res.json();
+    alert(data.mensaje);
 
     if (data.success) {
-      alert("Autenticación satisfactoria");
-      navigate("/menu"); // redirección
-    } else {
-      alert("Error en la autenticación");
+      navigate("/"); // 🔥 vuelve al login
     }
   };
 
@@ -53,32 +48,33 @@ function Login() {
 
         <img
           src={logo}
-          alt="Logo Institución"
+          alt="Logo"
           style={{ marginTop: "10px", width: "150px" }}
         />
       </div>
 
-      {/* Caja login */}
+      {/* Caja */}
       <div style={{
         width: "400px",
         border: "1px solid #6c63ff",
         padding: "30px",
-        backgroundColor: "white"
+        backgroundColor: "white",
+        borderRadius: "10px"
       }}>
 
-        <h3 style={{ fontStyle: "italic", color: "gray" }}>Iniciar Sesion</h3>
+        <h3 style={{ fontStyle: "italic" }}>Crear Cuenta</h3>
 
         <p style={{ fontSize: "14px", color: "gray" }}>
-          Ingresa tus credenciales para acceder a tu cuenta
+          Regístrate para acceder al sistema académico
         </p>
 
         {/* Usuario */}
         <label>Usuario</label>
         <input
           type="text"
-          placeholder="Ingrese su usuario"
-          value={correo}
-          onChange={(e) => setCorreo(e.target.value)}
+          placeholder="Ingrese un usuario"
+          value={user}
+          onChange={e => setUser(e.target.value)}
           style={{
             width: "100%",
             padding: "8px",
@@ -95,14 +91,14 @@ function Login() {
         <label>Contraseña</label>
         <input
           type="password"
-          placeholder="Ingrese su contraseña"
+          placeholder="Ingrese una contraseña"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={e => setPassword(e.target.value)}
           style={{
             width: "100%",
             padding: "8px",
             marginTop: "5px",
-            marginBottom: "10px",
+            marginBottom: "20px",
             borderRadius: "20px",
             border: "none",
             backgroundColor: "#0a0a0a",
@@ -110,21 +106,9 @@ function Login() {
           }}
         />
 
-        <div
-          onClick={() => navigate("/recuperar")}
-          style={{
-            textAlign: "right",
-            fontSize: "13px",
-            marginBottom: "20px",
-            cursor: "pointer",
-            color: "#2e2e8f"
-          }}
-        >
-          ¿Olvidaste tu contraseña?
-        </div>
-
+        {/* Botón */}
         <button
-          onClick={handleLogin}
+          onClick={registrar}
           style={{
             width: "100%",
             padding: "10px",
@@ -135,38 +119,20 @@ function Login() {
             cursor: "pointer"
           }}
         >
-          Iniciar sesión
+          Registrar
         </button>
 
-        <div style={{
-          textAlign: "center",
-          marginTop: "20px",
-          fontSize: "14px"
-        }}>
-          ¿No tienes una cuenta?
-
-          <div
-            onClick={() => navigate("/crear-cuenta")}
-            style={{
-              marginTop: "5px",
-              color: "#2e2e8f",
-              cursor: "pointer"
-            }}
-          >
-            Crear una cuenta
-
-            <div
-            onClick={() => navigate("/admin")}
-            style={{
-              marginTop: "20px",
-              color: "#2e2e8f",
-              cursor: "pointer"
-            }}
-          >
-             Ingresar como usuario administrativo
-
-            </div>
-          </div>
+        {/* Volver */}
+        <div
+          onClick={() => navigate("/")}
+          style={{
+            textAlign: "center",
+            marginTop: "20px",
+            cursor: "pointer",
+            color: "#2e2e8f"
+          }}
+        >
+          Volver al inicio de sesión
         </div>
 
       </div>
@@ -174,4 +140,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Registro;
